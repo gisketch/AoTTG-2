@@ -84,7 +84,8 @@ public class Hero : Human
     private float flareTotalCD = 30f;
     private Transform forearmL;
     private Transform forearmR;
-    private float gravity = 20f;
+    private float Gravity => 20f * gravityModifier;
+    private float gravityModifier = GameSettings.Global.Gravity ?? 1;
     public bool grounded;
     private GameObject gunDummy;
     private Vector3 gunTarget;
@@ -252,7 +253,16 @@ public class Hero : Human
         this.upperarmR = this.baseTransform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R");
         Equipment = gameObject.AddComponent<Equipment>();
         Faction = Service.Faction.GetHumanity();
+        Service.Settings.OnGlobalSettingsChanged += OnGlobalSettingsChanged;
         Service.Entity.Register(this);
+    }
+
+    public void OnGlobalSettingsChanged(GlobalSettings settings)
+    {
+        if (settings.Gravity.HasValue)
+        {
+            gravityModifier = settings.Gravity.Value;
+        }
     }
 
     public void backToHuman()
@@ -587,7 +597,7 @@ public class Hero : Human
 
     private float CalculateJumpVerticalSpeed()
     {
-        return Mathf.Sqrt((2f * this.jumpHeight) * this.gravity);
+        return Mathf.Sqrt((2f * this.jumpHeight) * this.Gravity);
     }
 
     private void changeBlade()
@@ -1434,7 +1444,7 @@ public class Hero : Human
                             force = -this.baseRigidBody.velocity;
                             force.y = num7;
                             float num8 = Vector3.Distance(myHorse.transform.position, baseTransform.position);
-                            float num9 = ((0.6f * this.gravity) * num8) / 12f;
+                            float num9 = ((0.6f * this.Gravity) * num8) / 12f;
                             vector7 = myHorse.transform.position - baseTransform.position;
                             force += (Vector3)(num9 * vector7.normalized);
                         }
@@ -1540,7 +1550,7 @@ public class Hero : Human
                             if (this.baseAnimation["toRoof"].normalizedTime < 0.22f)
                             {
                                 this.baseRigidBody.velocity = Vector3.zero;
-                                this.baseRigidBody.AddForce(new Vector3(0f, this.gravity * this.baseRigidBody.mass, 0f));
+                                this.baseRigidBody.AddForce(new Vector3(0f, this.Gravity * this.baseRigidBody.mass, 0f));
                             }
                             else
                             {
@@ -1748,7 +1758,7 @@ public class Hero : Human
                     }
                     else
                     {
-                        this.baseRigidBody.AddForce(new Vector3(0f, -this.gravity * this.baseRigidBody.mass, 0f));
+                        this.baseRigidBody.AddForce(new Vector3(0f, -this.Gravity * this.baseRigidBody.mass, 0f));
                     }
                     if (this.currentSpeed > 10f)
                     {
