@@ -5,10 +5,12 @@ using Assets.Scripts.Services;
 using Assets.Scripts.Services.Interface;
 using Assets.Scripts.UI.Camera;
 using Assets.Scripts.UI.Input;
+using Assets.Scripts.UI.InGame;
 using System;
 using UnityEngine;
 using static Assets.Scripts.FengGameManagerMKII;
 using Random = UnityEngine.Random;
+using Assets.Scripts.UI.InGame.HUD;
 
 public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 {
@@ -66,7 +68,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     private bool isRestarting = true;
     private float startingTime;
     public bool IsSpecmode => (int) settings[0xf5] == 1;
-
+    public GameObject HUD;
     private void Awake()
     {
         EntityService.OnRegister += EntityService_OnRegistered;
@@ -382,6 +384,11 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     public void Update()
     {
+
+         if (InputManager.KeyDown(InputUi.HideHUD))
+         {
+            ToggleHUD();
+         }
         SnapShotUpdate();
         if (flashDuration > 0f)
         {
@@ -661,6 +668,17 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         instance.chatRoom.OutputSystemMessage(message);
     }
 
+    public void ToggleHUD()
+    {
+        if(HUD.GetComponent<HUD>().isActive){
+            HUD.GetComponent<HUD>().isActive = false;
+            HUD.transform.localScale = new Vector3(0,0,0);
+        }else{
+            HUD.GetComponent<HUD>().isActive = true;
+            HUD.transform.localScale = new Vector3(1,1,1);
+        }
+    }
+
     public static void ToggleSpawnMenu()
     {
         var spawnMenu = FengGameManagerMKII.instance.InGameUI.SpawnMenu.gameObject;
@@ -728,7 +746,16 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             num3 = ((((Input.mousePosition.x - (Screen.width * 0.6f)) / Screen.width) * 0.4f) * GetSensitivityMultiWithDeltaTime()) * 150f;
             transform.RotateAround(transform.position, Vector3.up, num3);
         }
-        float x = ((140f * ((Screen.height * 0.6f) - Input.mousePosition.y)) / Screen.height) * 0.5f;
+
+        float x;
+
+        if(!MenuManager.IsAnyMenuOpen)
+        {
+            x = ((140f * ((Screen.height * 0.6f) - Input.mousePosition.y)) / Screen.height) * 0.5f;
+        } else
+        {
+            x = 0f;
+        }
         transform.rotation = Quaternion.Euler(x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
         Transform transform4 = transform;
         transform4.position -= ((transform.forward * distance) * distanceMulti) * distanceOffsetMulti;
@@ -781,12 +808,26 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private float GetSensitivityMulti()
     {
-        return InputManager.Settings.MouseSensitivity;
+        if(MenuManager.IsAnyMenuOpen)
+        {
+            return 0f; //Prevents camera from moving when on menu
+        }
+        else
+        {
+            return InputManager.Settings.MouseSensitivity;
+        }
     }
 
     private float GetSensitivityMultiWithDeltaTime()
     {
-        return InputManager.Settings.MouseSensitivity * Time.deltaTime * 62f;
+        if(MenuManager.IsAnyMenuOpen)
+        {
+            return 0f; //Prevents camera from moving when on menu
+        }
+        else
+        {
+            return InputManager.Settings.MouseSensitivity * Time.deltaTime * 62f;
+        }
     }
 
     private Texture2D RTImage2(Camera cam)
@@ -837,15 +878,22 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     {
         GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().addCamera(this);
         isPausing = false;
-
+        HUD =GameObject.Find("HUD");
         // This doesn't exist in the scene and causes a NullReferenceException.
         // TODO: Fix titan locking
         locker = GameObject.Find("locker");
         CreateSnapShotRT2();
+
+        // Find the compass gameobject to set the camera's transform to this.
+        CompassController compass = GameObject.Find("Compass").GetComponent<CompassController>();
+        compass.cam = this.transform;
+        compass.compassMode = true;
+
     }
 
     private void OnDestroy()
     {
         EntityService.OnRegister -= EntityService_OnRegistered;
+        GameObject.Find("Compass").GetComponent<CompassController>().compassMode = false;
     }
 }

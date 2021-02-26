@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Assets.Scripts.UI.Menu;
 using UnityEngine;
@@ -17,6 +17,9 @@ namespace Assets.Scripts.UI
         public MenuUi MenuUi;
         public GameObject InGameUi;
         public Text Version;
+
+        public bool hasCustomHUD = false;
+        
 
         public void Start()
         {

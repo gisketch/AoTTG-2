@@ -6,6 +6,7 @@ namespace Assets.Scripts.UI
     public class UIInputHandler : MonoBehaviour
     {
         private GameObject interactionWheel;
+        public GameObject[] hooksIndicators;
 
         private void Start()
         {
@@ -24,6 +25,20 @@ namespace Assets.Scripts.UI
             {
                 if (interactionWheel.activeSelf)
                     interactionWheel.SetActive(false);
+            }
+
+            if(InputManager.KeyDown(InputUi.HideHooks))
+            {
+                foreach(GameObject hook in hooksIndicators)
+                {
+                    if(hook.activeSelf)
+                    {
+                        hook.SetActive(false);
+                    } else
+                    {
+                        hook.SetActive(true);
+                    }
+                }
             }
 
         }

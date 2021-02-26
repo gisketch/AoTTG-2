@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Room.Chat;
+using Assets.Scripts.Room.Chat;
 using Assets.Scripts.Services;
 using Assets.Scripts.Services.Interface;
 using Assets.Scripts.UI.InGame.Controls;
@@ -11,10 +11,12 @@ namespace Assets.Scripts.UI.InGame
     {
         public HUD.HUD HUD;
         public InGameMenu Menu;
+        public Scoreboard.Scoreboard Scoreboard;
         public SpawnMenu SpawnMenu;
         public GraphicSettingMenu GraphicSettingMenu;
         public ControlsMenu ControlsMenu;
         public PauseIndicator PauseIndicator;
+        public ChangeHUDHandler ChangeHUDMenu;
         private static IPauseService PauseService => Service.Pause;
 
         public void TogglePauseMenu()
@@ -37,8 +39,10 @@ namespace Assets.Scripts.UI.InGame
             }
         }
 
+
         private void Awake()
         {
+            AddChild(ChangeHUDMenu);
             AddChild(HUD);
             AddChild(Menu);
             AddChild(SpawnMenu);
@@ -60,6 +64,8 @@ namespace Assets.Scripts.UI.InGame
             Menu.Hide();
             PauseIndicator.Hide();
             ControlsMenu.Hide();
+            Scoreboard.Hide();
+            ChangeHUDMenu.Hide();
 
             PauseService.OnPaused += PauseService_OnPaused;
             PauseService.OnUnPaused += PauseService_OnUnPaused;
@@ -79,6 +85,17 @@ namespace Assets.Scripts.UI.InGame
             {
                 TogglePauseMenu();
             }
+            
+            // TODO: I hardcoded in KeyCode.Tab, but figure out how to implement the enumeration found in InputManager.
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Tab) && !MenuManager.IsMenuOpen(typeof(InRoomChat)))
+            {
+                Scoreboard.Show();
+            }
+            if (UnityEngine.Input.GetKeyUp(KeyCode.Tab) && !MenuManager.IsMenuOpen(typeof(InRoomChat)))
+            {
+                Scoreboard.Hide();
+            }
+            
         }
 
         private void OnDestroy()

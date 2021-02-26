@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Assets.Scripts.UI.InGame.HUD
 {
@@ -8,31 +9,72 @@ namespace Assets.Scripts.UI.InGame.HUD
     {
         public GameObject Damage;
         public Labels Labels;
+        public GameObject BloodSmear;
+        public bool inEditMode;
+        public bool isActive = true;
+        public float damageTimer = 2.25f;
+        public bool inDamageWindow;
+
+        void Update()
+        {
+            if(damageTimer > 0)
+            {
+                damageTimer -= Time.deltaTime;
+                inDamageWindow = true;
+            }
+            
+            if(damageTimer <= 0)
+            {
+                inDamageWindow = false;
+            }
+            
+        }
 
         public void SetDamage(int damage)
         {
-            var damageLabels = Damage.GetComponentsInChildren<Text>();
+            var damageLabels = Damage.GetComponentsInChildren<TMP_Text>();
             foreach (var label in damageLabels)
             {
                 label.fontSize = ScaleDamageText(damage);
-                label.text = damage.ToString();
+                if(inDamageWindow)
+                {
+                    label.text += " " + damage.ToString(); //Do some effects with double damage, maybe a certain animations
+                    // label.color = Color.red;
+                }
+                else
+                {
+                    label.text = damage.ToString();
+                }
             }
 
+            damageTimer = 2.25f;
+
             ShowDamage();
+            ShowBloodSmear(damage);
         }
+
 
         public void ClearDamage()
         {
-            var damageLabels = Damage.GetComponentsInChildren<Text>();
+            var damageLabels = Damage.GetComponentsInChildren<TMP_Text>();
             foreach (var label in damageLabels)
             {
-                label.text = string.Empty;
+                label.text = "";
             }
+            Damage.transform.localScale = new Vector3(0,0,1f);
         }
 
         private void ShowDamage()
         {
             Damage.GetComponent<Animator>().SetTrigger("ShowDamage");
+        }
+
+        private void ShowBloodSmear(int damage)
+        {
+            if(damage >= 1000)
+            {
+                BloodSmear.GetComponent<Animator>().SetTrigger("ShowBloodSmear");
+            }
         }
 
         private int ScaleDamageText(int damage)

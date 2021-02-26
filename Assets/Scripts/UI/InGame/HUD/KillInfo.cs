@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Assets.Scripts.UI.InGame.HUD
 {
@@ -7,20 +8,26 @@ namespace Assets.Scripts.UI.InGame.HUD
     {
         private float alpha = 1f;
         private int col;
-        public Text KillerLabel;
-        public Text DamageLabel;
-        public Text VictimLabel;
+        //public Text KillerLabel;
+        //public Text DamageLabel;
+        //public Text VictimLabel;
+        public TMP_Text KillerLabel;
+        public TMP_Text DamageLabel;
+        public TMP_Text VictimLabel;
         private float lifeTime = 8f;
         private float maxScale = 1.5f;
         private int offset = 24;
         private bool start;
         private float timeElapsed;
+        private float startPosition;
+        private float startPositionRatio = 0.85f; // this is the proportion of the total screen that is below the kill feed.
 
         public void Destroy()
         {
             this.timeElapsed = this.lifeTime;
         }
 
+        // Increments the column counter so that kills don't overlap. 
         public void MoveOn()
         {
             this.col++;
@@ -69,8 +76,10 @@ namespace Assets.Scripts.UI.InGame.HUD
         private void Start()
         {
             this.start = true;
-            base.transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
-            base.transform.localPosition = new Vector3(0f, -100f + (Screen.height * 0.5f), 0f);
+            this.transform.localScale = new Vector3(1,1,1);
+            // base.transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
+            // startPosition = (Screen.height * startPositionRatio);
+            // base.transform.position = new Vector3(Screen.width * 0.5f, startPosition, 0f);
         }
 
         private void Update()
@@ -78,25 +87,25 @@ namespace Assets.Scripts.UI.InGame.HUD
             if (this.start)
             {
                 this.timeElapsed += Time.deltaTime;
-                if (this.timeElapsed < 0.2f)
-                {
-                    base.transform.localScale = Vector3.Lerp(base.transform.localScale, (Vector3)(Vector3.one * this.maxScale), Time.deltaTime * 10f);
-                }
-                else if (this.timeElapsed < 1f)
-                {
-                    base.transform.localScale = Vector3.Lerp(base.transform.localScale, Vector3.one, Time.deltaTime * 10f);
-                }
-                if (this.timeElapsed > this.lifeTime)
-                {
-                    base.transform.position += new Vector3(0f, Time.deltaTime * 0.15f, 0f);
-                    this.alpha = ((1f - (Time.deltaTime * 45f)) + this.lifeTime) - this.timeElapsed;
-                    this.setAlpha(this.alpha);
-                }
-                else
-                {
-                    float num = ((int)(100f - (Screen.height * 0.5f))) + (this.col * this.offset);
-                    base.transform.localPosition = Vector3.Lerp(base.transform.localPosition, new Vector3(0f, -num, 0f), Time.deltaTime * 10f);
-                }
+                // if (this.timeElapsed < 0.2f)
+                // {
+                //     base.transform.localScale = Vector3.Lerp(base.transform.localScale, (Vector3)(Vector3.one * this.maxScale), Time.deltaTime * 10f);
+                // }
+                // else if (this.timeElapsed < 1f)
+                // {
+                //     base.transform.localScale = Vector3.Lerp(base.transform.localScale, Vector3.one, Time.deltaTime * 10f);
+                // }
+                // if (this.timeElapsed > this.lifeTime)
+                // {
+                //     base.transform.position += new Vector3(0f, Time.deltaTime * 0.15f, 0f);
+                //     this.alpha = ((1f - (Time.deltaTime * 45f)) + this.lifeTime) - this.timeElapsed;
+                //     this.setAlpha(this.alpha);
+                // }
+                // else
+                // {
+                //     float num = ((int)(-startPosition)) + (this.col * this.offset);
+                //     base.transform.position = Vector3.Lerp(base.transform.position, new Vector3(Screen.width * 0.5f, -num, 0f), Time.deltaTime * 10f);
+                // }
                 if (this.timeElapsed > (this.lifeTime + 0.5f))
                 {
                     UnityEngine.Object.Destroy(base.gameObject);
