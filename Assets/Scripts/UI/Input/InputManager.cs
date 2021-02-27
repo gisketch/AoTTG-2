@@ -31,7 +31,7 @@ namespace Assets.Scripts.UI.Input
 #if UNITY_EDITOR
             Menu = KeyCode.P;
 #else
-            Menu = KeyCode.Escape;
+            Menu = KeyCode.P;
 #endif
         }
 

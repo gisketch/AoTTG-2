@@ -5,7 +5,7 @@ public class GameCursor : MonoBehaviour
 {
     private const string CameraModeKey = "cameraType";
 
-    private static CameraMode _cameraMode = CameraMode.Original;
+    private static CameraMode _cameraMode = CameraMode.TPS;
     private static CursorMode _cursorMode = CursorMode.Menu;
 
     private static bool _forceFreeCursor = false;

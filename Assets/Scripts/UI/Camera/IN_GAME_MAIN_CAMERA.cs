@@ -720,8 +720,8 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private void DoTPSMovement()
     {
-        float num5 = (Input.GetAxis("Mouse X") * 10f) * GetSensitivityMulti();
-        float num6 = ((-Input.GetAxis("Mouse Y") * 10f) * GetSensitivityMulti()) * GetReverse();
+        float num5 = (Input.GetAxis("RightHorizontal") * 1.5f) * GetSensitivityMulti();
+        float num6 = ((-Input.GetAxis("RightVertical") * 1.5f) * GetSensitivityMulti()) * GetReverse();
         transform.RotateAround(transform.position, Vector3.up, num5);
         float num7 = transform.rotation.eulerAngles.x % 360f;
         float num8 = num7 + num6;

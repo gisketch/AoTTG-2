@@ -635,7 +635,8 @@ public class Hero : Human
                 this.rTapTime = -1f;
             }
         }
-        if (InputManager.KeyDown(InputHuman.Forward))
+        
+        if (UnityEngine.Input.GetAxis("Vertical") > 0)
         {
             if (this.uTapTime == -1f)
             {
@@ -646,7 +647,7 @@ public class Hero : Human
                 this.dashU = true;
             }
         }
-        if (InputManager.KeyDown(InputHuman.Backward))
+        if (UnityEngine.Input.GetAxis("Vertical") < 0)
         {
             if (this.dTapTime == -1f)
             {
@@ -657,7 +658,7 @@ public class Hero : Human
                 this.dashD = true;
             }
         }
-        if (InputManager.KeyDown(InputHuman.Left))
+        if (UnityEngine.Input.GetAxis("Horizontal") < 0)
         {
             if (this.lTapTime == -1f)
             {
@@ -668,7 +669,7 @@ public class Hero : Human
                 this.dashL = true;
             }
         }
-        if (InputManager.KeyDown(InputHuman.Right))
+        if (UnityEngine.Input.GetAxis("Horizontal") > 0)
         {
             if (this.rTapTime == -1f)
             {
@@ -685,19 +686,19 @@ public class Hero : Human
     {
         if (InputManager.Key(InputHuman.GasBurst))
         {
-            if (InputManager.Key(InputHuman.Forward))
+            if (UnityEngine.Input.GetAxis("Vertical") > 0)
             {
                 this.dashU = true;
             }
-            else if (InputManager.Key(InputHuman.Backward))
+            else if (UnityEngine.Input.GetAxis("Vertical") < 0)
             {
                 this.dashD = true;
             }
-            else if (InputManager.Key(InputHuman.Left))
+            else if (UnityEngine.Input.GetAxis("Horizontal") < 0)
             {
                 this.dashL = true;
             }
-            else if (InputManager.Key(InputHuman.Right))
+            else if (UnityEngine.Input.GetAxis("Horizontal") > 0)
             {
                 this.dashR = true;
             }
@@ -968,11 +969,11 @@ public class Hero : Human
             {
                 float num;
                 float num2;
-                if (InputManager.Key(InputHuman.Forward))
+                if (UnityEngine.Input.GetAxis("Vertical") > 0)
                 {
                     num = 1f;
                 }
-                else if (InputManager.Key(InputHuman.Backward))
+                else if (UnityEngine.Input.GetAxis("Vertical") < 0)
                 {
                     num = -1f;
                 }
@@ -980,11 +981,11 @@ public class Hero : Human
                 {
                     num = 0f;
                 }
-                if (InputManager.Key(InputHuman.Left))
+                if (UnityEngine.Input.GetAxis("Horizontal") < 0)
                 {
                     num2 = -1f;
                 }
-                else if (InputManager.Key(InputHuman.Right))
+                else if (UnityEngine.Input.GetAxis("Horizontal") > 0)
                 {
                     num2 = 1f;
                 }
@@ -1172,11 +1173,11 @@ public class Hero : Human
                     float z = 0f;
                     if (!IN_GAME_MAIN_CAMERA.isTyping)
                     {
-                        if (InputManager.Key(InputHuman.Forward))
+                        if (UnityEngine.Input.GetAxis("Vertical") > 0)
                         {
                             z = 1f;
                         }
-                        else if (InputManager.Key(InputHuman.Backward))
+                        else if (UnityEngine.Input.GetAxis("Vertical") < 0)
                         {
                             z = -1f;
                         }
@@ -1184,11 +1185,11 @@ public class Hero : Human
                         {
                             z = 0f;
                         }
-                        if (InputManager.Key(InputHuman.Left))
+                        if (UnityEngine.Input.GetAxis("Horizontal") < 0)
                         {
                             x = -1f;
                         }
-                        else if (InputManager.Key(InputHuman.Right))
+                        else if (UnityEngine.Input.GetAxis("Horizontal") > 0)
                         {
                             x = 1f;
                         }
@@ -1559,8 +1560,8 @@ public class Hero : Human
                         }
                         else if (!(((((this.state != HERO_STATE.Idle) || !this.isPressDirectionTowardsHero(x, z)) ||
                                      (InputManager.Key(InputHuman.Jump) ||
-                                      InputManager.Key(InputHuman.HookLeft))) ||
-                                    ((InputManager.Key(InputHuman.HookRight) ||
+                                      UnityEngine.Input.GetAxis("ZL") > 0)) ||
+                                    ((UnityEngine.Input.GetAxis("ZR") > 0 ||
                                       InputManager.Key(InputHuman.HookBoth)) ||
                                      (!this.IsFrontGrounded() || this.baseAnimation.IsPlaying("wallrun")))) ||
                                    this.baseAnimation.IsPlaying("dodge")))
@@ -4928,11 +4929,11 @@ public class Hero : Human
                                 {
                                     if (this.needLean)
                                     {
-                                        if (InputManager.Key(InputHuman.Left))
+                                        if (UnityEngine.Input.GetAxis("Horizontal") < 0)
                                         {
                                             this.attackAnimation = (UnityEngine.Random.Range(0, 100) >= 50) ? "attack1_hook_l1" : "attack1_hook_l2";
                                         }
-                                        else if (InputManager.Key(InputHuman.Right))
+                                        else if (UnityEngine.Input.GetAxis("Horizontal") > 0)
                                         {
                                             this.attackAnimation = (UnityEngine.Random.Range(0, 100) >= 50) ? "attack1_hook_r1" : "attack1_hook_r2";
                                         }
@@ -4945,11 +4946,11 @@ public class Hero : Human
                                             this.attackAnimation = (UnityEngine.Random.Range(0, 100) >= 50) ? "attack1_hook_r1" : "attack1_hook_r2";
                                         }
                                     }
-                                    else if (InputManager.Key(InputHuman.Left))
+                                    else if (UnityEngine.Input.GetAxis("Horizontal") < 0)
                                     {
                                         this.attackAnimation = "attack2";
                                     }
-                                    else if (InputManager.Key(InputHuman.Right))
+                                    else if (UnityEngine.Input.GetAxis("Horizontal") > 0)
                                     {
                                         this.attackAnimation = "attack1";
                                     }
@@ -5506,7 +5507,7 @@ public class Hero : Human
                                 this.idle();
                             }
                         }
-                        if (InputManager.Key(InputHuman.HookLeft))
+                        if (UnityEngine.Input.GetAxis("ZL") > 0)
                         {
                             ReflectorVariable0 = true;
                         }
@@ -5542,7 +5543,7 @@ public class Hero : Human
                         {
                             this.QHold = false;
                         }
-                        if (InputManager.Key(InputHuman.HookRight))
+                        if (UnityEngine.Input.GetAxis("ZR") > 0)
                         {
                             ReflectorVariable1 = true;
                         }
