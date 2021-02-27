@@ -3448,7 +3448,7 @@ public static class PhotonNetwork
 
 		if (_PunFolderPath != null)
 		{
-			return "Assets" + _PunFolderPath.Substring(Application.dataPath.Length)+"/";
+			return "Assets" + _PunFolderPath.Substring(Application.persistentDataPath.Length)+"/";
 		}
 
 		return "Assets/Photon Unity Networking/";

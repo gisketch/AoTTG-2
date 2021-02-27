@@ -179,7 +179,7 @@ namespace Assets.Scripts.Services
 
         private static string GetApplicationPath()
         {
-            var path = Application.dataPath;
+            var path = Application.persistentDataPath;
             switch (Application.platform)
             {
                 case RuntimePlatform.WindowsPlayer:

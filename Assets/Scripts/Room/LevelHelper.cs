@@ -11,8 +11,8 @@ namespace Assets.Scripts.Room
 
         public static string[] GetAll()
         {
-            Directory.CreateDirectory(Path.Combine(Application.dataPath, "Custom Maps"));
-            var files = Directory.GetFiles(Path.Combine(Application.dataPath, "Custom Maps")).Where(x => x.EndsWith(".unity3d")).ToArray();
+            Directory.CreateDirectory(Path.Combine(Application.persistentDataPath, "Custom Maps"));
+            var files = Directory.GetFiles(Path.Combine(Application.persistentDataPath, "Custom Maps")).Where(x => x.EndsWith(".unity3d")).ToArray();
             files = files.Select(x => x.Split(Path.DirectorySeparatorChar).Last().Replace(".unity3d", "")).ToArray();
             return files;
         }
@@ -26,7 +26,7 @@ namespace Assets.Scripts.Room
 
             if (level.IsCustom)
             {
-                CurrentAssetBundle = AssetBundle.LoadFromFile(Path.Combine(Application.dataPath, Path.Combine("Custom Maps", level.AssetBundle + ".unity3d")));
+                CurrentAssetBundle = AssetBundle.LoadFromFile(Path.Combine(Application.persistentDataPath, Path.Combine("Custom Maps", level.AssetBundle + ".unity3d")));
                 level.SceneName = CurrentAssetBundle.GetAllScenePaths().FirstOrDefault();
             }
 

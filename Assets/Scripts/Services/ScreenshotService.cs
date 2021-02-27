@@ -11,7 +11,7 @@ namespace Assets.Scripts.Services
 
         private void Awake()
         {
-            var temp = $"{Application.dataPath}/{ScreenDirectory}";
+            var temp = $"{Application.persistentDataPath}/{ScreenDirectory}";
             if (!Directory.Exists(temp))
                 Directory.CreateDirectory(temp);
         }
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Services
         {
             string current = DateTime.Now.ToShortDateString();
             var cultured = current.Replace("/", "-");
-            var final = $"{Application.dataPath}/{ScreenDirectory}/{cultured}";
+            var final = $"{Application.persistentDataPath}/{ScreenDirectory}/{cultured}";
             if (!Directory.Exists(final))
                 Directory.CreateDirectory(final);
 

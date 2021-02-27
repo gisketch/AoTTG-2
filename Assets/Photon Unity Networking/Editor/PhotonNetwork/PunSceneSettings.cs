@@ -29,12 +29,12 @@ public class PunSceneSettings : ScriptableObject
             }
 
             // Unity 4.3.4 does not yet have AssetDatabase.FindAssets(). Would be easier.
-            var result = Directory.GetFiles(Application.dataPath, "PunSceneSettings.cs", SearchOption.AllDirectories);
+            var result = Directory.GetFiles(Application.persistentDataPath, "PunSceneSettings.cs", SearchOption.AllDirectories);
             if (result.Length >= 1)
             {
                 punSceneSettingsCsPath = Path.GetDirectoryName(result[0]);
                 punSceneSettingsCsPath = punSceneSettingsCsPath.Replace('\\', '/');
-                punSceneSettingsCsPath = punSceneSettingsCsPath.Replace(Application.dataPath, "Assets");
+                punSceneSettingsCsPath = punSceneSettingsCsPath.Replace(Application.persistentDataPath, "Assets");
 
                 // AssetDatabase paths have to use '/' and are relative to the project's folder. Always.
                 punSceneSettingsCsPath = punSceneSettingsCsPath + "/" + SceneSettingsFileName;
